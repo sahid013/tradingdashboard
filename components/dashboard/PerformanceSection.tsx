@@ -14,7 +14,7 @@ import {
     Legend,
     Filler,
 } from 'chart.js';
-import { User, Target, Scale, TrendingDown } from 'lucide-react';
+import { Target, Scale, TrendingDown } from 'lucide-react';
 import KPICard from './KPICard';
 
 // Register ChartJS components
@@ -109,22 +109,7 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = () => {
 
     return (
         <div>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-                <div className="flex items-center gap-3">
-                    {/* Updated Icon Style */}
-                    <div className="w-12 h-12 rounded-lg bg-white/10 text-white flex items-center justify-center border border-white/10">
-                        <User size={24} />
-                    </div>
-                    <div>
-                        {/* Updated Text Color and Details */}
-                        <h2 className="text-2xl font-bold text-white" suppressHydrationWarning>Name</h2>
-                        <p className="text-sm text-gray-400">Account: 84930229 • Phase 2</p>
-                    </div>
-                </div>
 
-                {/* AI BUTTON */}
-
-            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {/* Main Chart - Added 'relative' and overflow hidden to fix rendering */}
