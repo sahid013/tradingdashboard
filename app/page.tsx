@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState } from 'react';
-import Header from '../components/layout/Header';
-import Footer from '../components/layout/Footer';
+
 import PerformanceSection from '../components/dashboard/PerformanceSection';
 import LiveDashboardSection from '../components/dashboard/LiveDashboardSection';
 import TradeHistory from '../components/dashboard/TradeHistory';
-import CTASection from '../components/dashboard/CTASection';
+
 import AIAnalystModal from '../components/dashboard/AIAnalystModal';
 import { Stats } from '@/types';
 
@@ -27,7 +26,7 @@ const LiveTradingDashboard = () => {
 
   return (
     <div className="min-h-screen bg-black font-sans text-gray-300 selection:bg-[#DCC885] selection:text-black relative">
-      <Header />
+
 
       <main className="container mx-auto px-4 py-8 space-y-12 max-w-7xl">
         <div className="text-center space-y-2">
@@ -46,11 +45,10 @@ const LiveTradingDashboard = () => {
         {/* 3. Trade History Table */}
         <TradeHistory />
 
-        {/* 4. CTA Section */}
-        <CTASection />
+
       </main>
 
-      <Footer />
+
 
       {/* AI MODAL */}
       {isAIModalOpen && (
