@@ -33,45 +33,10 @@ const LiveDashboardSection: React.FC<LiveDashboardSectionProps> = ({ stats, setS
             setConnectionStatus('Live');
         }, 1500);
 
-        const interval = setInterval(() => {
-            setStats((prev) => {
-                const volatility = (Math.random() - 0.5);
-                const newEquity = prev.equity + (volatility * 150);
-                const newBalance = Math.random() > 0.7 ? prev.balance + (volatility * 50) : prev.balance;
-                const newWinRate = Math.min(100, Math.max(0, prev.winRate + (volatility * 0.5)));
-                let newTrades = prev.numTrades;
-                let newLots = prev.lots;
-
-                if (Math.random() > 0.9) {
-                    newTrades += 1;
-                    newLots += 0.1;
-                }
-
-                return {
-                    equity: newEquity,
-                    balance: newBalance,
-                    winRate: parseFloat(newWinRate.toFixed(1)),
-                    avgProfit: prev.avgProfit + (volatility * 2),
-                    avgLoss: prev.avgLoss + (volatility * 1),
-                    numTrades: newTrades,
-                    lots: newLots,
-                };
-            });
-
-            if (Math.random() > 0.8) {
-                setChartDataState(prev => {
-                    const newData = [...prev];
-                    newData[6] = Math.max(5, newData[6] + (Math.random() - 0.5) * 5);
-                    return newData;
-                });
-            }
-        }, 1000);
-
         return () => {
             clearTimeout(connectTimer);
-            clearInterval(interval);
         };
-    }, [setStats]);
+    }, []);
 
     // --- CHART CONFIG ---
     const chartOptions = {
