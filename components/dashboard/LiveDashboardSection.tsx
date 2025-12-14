@@ -73,7 +73,10 @@ const LiveDashboardSection: React.FC<LiveDashboardSectionProps> = ({ stats, setS
                 borderWidth: 1,
             }
         },
-        animation: { duration: 500 },
+        animation: {
+            duration: 1500,
+            easing: 'easeOutQuart' as const,
+        },
     };
 
     const chartConfig = {
@@ -124,7 +127,7 @@ const LiveDashboardSection: React.FC<LiveDashboardSectionProps> = ({ stats, setS
                     )}
                 </div>
 
-                <h3 className="text-xl font-bold text-[#DCC885] mb-6">Trade Statistics</h3>
+                <h3 className="text-xl font-bold text-[#DCC885] mb-6" suppressHydrationWarning>Trade Statistics</h3>
 
                 <div className="space-y-5">
                     <StatRow icon={<Wallet size={16} />} label="Equity" value={fmt(stats.equity)} barColor="bg-[#DCC885]" width="90%" />
@@ -138,7 +141,7 @@ const LiveDashboardSection: React.FC<LiveDashboardSectionProps> = ({ stats, setS
 
             {/* --- RIGHT SECTION: Activity Chart --- */}
             <div className="flex-1 bg-[#0a0a0a] p-6 rounded-xl border border-gray-800 flex flex-col">
-                <h3 className="text-xl font-bold text-[#DCC885] mb-6">Activity</h3> {/* Increased size */}
+                <h3 className="text-xl font-bold text-[#DCC885] mb-6" suppressHydrationWarning>Activity</h3> {/* Increased size */}
                 <div className="flex-1 min-h-[250px] w-full">
                     <Bar options={chartOptions} data={chartConfig} />
                 </div>

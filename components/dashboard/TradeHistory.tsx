@@ -34,7 +34,7 @@ const TradeHistory = () => {
 
     return (
         <div className="bg-[#0a0a0a] rounded-xl border border-gray-800 p-6">
-            <h3 className="text-xl font-bold text-[#DCC885] mb-2">Trade History</h3>
+            <h3 className="text-xl font-bold text-[#DCC885] mb-2" suppressHydrationWarning>Trade History</h3>
             <p className="text-xs text-gray-500 mb-6">View all closed trades</p>
 
             <div className="overflow-x-auto">
@@ -90,8 +90,8 @@ const TradeHistory = () => {
                             key={number}
                             onClick={() => handlePageChange(number)}
                             className={`px-3 py-1 rounded font-bold transition-colors ${currentPage === number
-                                    ? 'bg-[#DCC885] text-black'
-                                    : 'bg-[#111] hover:bg-[#222] text-white'
+                                ? 'bg-[#DCC885] text-black'
+                                : 'bg-[#111] hover:bg-[#222] text-white'
                                 }`}
                         >
                             {number}

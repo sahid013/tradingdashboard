@@ -14,7 +14,7 @@ import {
     Legend,
     Filler,
 } from 'chart.js';
-import { User } from 'lucide-react';
+import { User, Target, Scale, TrendingDown } from 'lucide-react';
 import KPICard from './KPICard';
 
 // Register ChartJS components
@@ -26,6 +26,7 @@ interface PerformanceSectionProps {
 
 const PerformanceSection: React.FC<PerformanceSectionProps> = () => {
     const [selectedPeriod, setSelectedPeriod] = React.useState('Daily');
+    const [profitView, setProfitView] = React.useState<'currency' | 'percent'>('currency');
 
     const dailyData = {
         labels: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'],
@@ -99,7 +100,11 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = () => {
         scales: {
             x: { grid: { color: '#222' }, ticks: { color: '#666' } },
             y: { grid: { color: '#222' }, ticks: { color: '#666' } },
-        }
+        },
+        animation: {
+            duration: 2000,
+            easing: 'easeOutQuart' as const,
+        },
     };
 
     return (
@@ -112,7 +117,7 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = () => {
                     </div>
                     <div>
                         {/* Updated Text Color and Details */}
-                        <h2 className="text-2xl font-bold text-white">Name</h2>
+                        <h2 className="text-2xl font-bold text-white" suppressHydrationWarning>Name</h2>
                         <p className="text-sm text-gray-400">Account: 84930229 • Phase 2</p>
                     </div>
                 </div>
@@ -123,9 +128,9 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {/* Main Chart - Added 'relative' and overflow hidden to fix rendering */}
-                <div className="lg:col-span-3 bg-[#0a0a0a] border border-gray-800 rounded-xl p-6 relative overflow-hidden">
+                <div className="lg:col-span-3 bg-[#0a0a0a] border border-gray-800 rounded-xl p-6 relative overflow-hidden flex flex-col">
                     <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-lg font-bold text-[#DCC885]">Cumulative Daily Profit</h3>
+                        <h3 className="text-lg font-bold text-[#DCC885]" suppressHydrationWarning>Cumulative Daily Profit</h3>
                         <select
                             value={selectedPeriod}
                             onChange={(e) => setSelectedPeriod(e.target.value)}
@@ -136,17 +141,55 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = () => {
                         </select>
                     </div>
                     {/* Chart Container */}
-                    <div className="relative w-full h-[300px]">
+                    <div className="relative w-full flex-1 min-h-[300px]">
                         <Line data={chartData} options={options} />
                     </div>
                 </div>
 
                 {/* Side Stats */}
                 <div className="space-y-4">
-                    <KPICard label="Profit" value="$10,016.81" subValue="+2.4%" isPositive={true} />
-                    <KPICard label="Win Rate" value="77.5%" chart={true} />
-                    <KPICard label="Profit Factor" value="3.81" chart={true} />
-                    <KPICard label="Max Drawdown" value="1.38%" isPositive={false} />
+                    <KPICard
+                        label="Profit"
+                        value={profitView === 'currency' ? "$10,016.81" : "+2.4%"}
+                        isPositive={true}
+                        infoIcon={true}
+                        tooltipText="Net Realized"
+                        showToggle={true}
+                        toggleState={profitView}
+                        onToggle={setProfitView}
+                    />
+                    <KPICard
+                        label="Win Rate"
+                        value="77.5%"
+                        subValue="31|9"
+                        infoIcon={true}
+                        tooltipText="% Wins"
+                        headerIcon={<Target size={14} />}
+                        progressVariant="circle"
+                        progressValue={77.5} // 0-100 scale
+                        barColor="text-[#DCC885]"
+                    />
+                    <KPICard
+                        label="Profit Factor"
+                        value="3.81"
+                        infoIcon={true}
+                        tooltipText="Gross Profit / Loss"
+                        headerIcon={<Scale size={14} />}
+                        progressVariant="circle"
+                        progressValue={38.1} // (3.81 / 10) * 100
+                        barColor="text-[#DCC885]"
+                    />
+                    <KPICard
+                        label="Max Drawdown"
+                        value="1.36%"
+                        isPositive={false}
+                        infoIcon={true}
+                        tooltipText="Peak to Trough"
+                        headerIcon={<TrendingDown size={14} className="text-red-500" />}
+                        progressVariant="horizontal"
+                        progressValue={1.36} // Pure 0-100 scale
+                        barColor="text-red-500"
+                    />
                 </div>
             </div>
         </div>
