@@ -25,7 +25,9 @@ interface PerformanceSectionProps {
 }
 
 const PerformanceSection: React.FC<PerformanceSectionProps> = () => {
-    const chartData = {
+    const [selectedPeriod, setSelectedPeriod] = React.useState('Daily');
+
+    const dailyData = {
         labels: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'],
         datasets: [
             {
@@ -50,6 +52,34 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = () => {
             }
         ],
     };
+
+    const weeklyData = {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+        datasets: [
+            {
+                label: 'Balance',
+                data: [5000, 8500, 12000, 15500, 18000],
+                borderColor: '#22c55e',
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#22c55e',
+                pointRadius: 0,
+                pointHoverRadius: 6,
+            },
+            {
+                label: 'Equity',
+                data: [4800, 8200, 11500, 15000, 17500],
+                borderColor: '#DCC885',
+                borderDash: [5, 5],
+                tension: 0.4,
+                pointRadius: 0,
+                pointHoverRadius: 6,
+            }
+        ],
+    };
+
+    const chartData = selectedPeriod === 'Daily' ? dailyData : weeklyData;
 
     const options = {
         responsive: true,
@@ -96,9 +126,13 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = () => {
                 <div className="lg:col-span-3 bg-[#0a0a0a] border border-gray-800 rounded-xl p-6 relative overflow-hidden">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="text-lg font-bold text-[#DCC885]">Cumulative Daily Profit</h3>
-                        <select className="bg-[#111] border border-gray-800 text-xs text-gray-400 rounded px-2 py-1 outline-none">
-                            <option>Daily</option>
-                            <option>Weekly</option>
+                        <select
+                            value={selectedPeriod}
+                            onChange={(e) => setSelectedPeriod(e.target.value)}
+                            className="bg-[#111] border border-gray-800 text-xs text-gray-400 rounded px-2 py-1 outline-none"
+                        >
+                            <option value="Daily">Daily</option>
+                            <option value="Weekly">Weekly</option>
                         </select>
                     </div>
                     {/* Chart Container */}
