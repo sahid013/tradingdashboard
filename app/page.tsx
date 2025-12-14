@@ -29,12 +29,7 @@ const LiveTradingDashboard = () => {
 
 
       <main className="container mx-auto px-4 py-8 space-y-12 max-w-7xl">
-        <div className="text-center space-y-2">
-          <div className="inline-block px-3 py-1 rounded-full border border-gray-800 bg-[#111] text-xs text-[#666] mb-2 uppercase tracking-widest">
-            Verified User
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-[#DCC885]">Trader Performance Summary</h1>
-        </div>
+
 
         {/* 1. Account Info & Performance Chart */}
         <PerformanceSection onOpenAI={() => setIsAIModalOpen(true)} />
