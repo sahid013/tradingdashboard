@@ -11,7 +11,7 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
-import { WifiOff, Wallet, DollarSign, PieChart, TrendingUp, Hash } from 'lucide-react';
+import { WifiOff, Wallet, DollarSign, PieChart, TrendingUp, TrendingDown, Hash, BarChart2, Award, AlertCircle } from 'lucide-react';
 
 // Register ChartJS components needed for this section
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -111,7 +111,7 @@ const LiveDashboardSection: React.FC<LiveDashboardSectionProps> = ({ stats, setS
     return (
         <div className="flex flex-col md:flex-row gap-6 w-full">
             {/* --- LEFT SECTION: Trade Statistics --- */}
-            <div className="flex-1 bg-[#0a0a0a] p-6 rounded-xl border border-gray-800 relative overflow-hidden">
+            <div className="flex-1 bg-[#0a0a0a] p-6 rounded-xl border border-gray-800 relative overflow-hidden flex flex-col">
 
                 {/* Status Indicator */}
                 <div className="absolute top-6 right-6 flex items-center gap-2">
@@ -129,13 +129,22 @@ const LiveDashboardSection: React.FC<LiveDashboardSectionProps> = ({ stats, setS
 
                 <h3 className="text-xl font-bold text-[#DCC885] mb-6" suppressHydrationWarning>Trade Statistics</h3>
 
-                <div className="space-y-5">
-                    <StatRow icon={<Wallet size={16} />} label="Equity" value={fmt(stats.equity)} barColor="bg-[#DCC885]" width="90%" />
-                    <StatRow icon={<DollarSign size={16} />} label="Balance" value={fmt(stats.balance)} barColor="bg-green-500" width="88%" />
-                    <StatRow icon={<PieChart size={16} />} label="Win Rate" value={`${stats.winRate}%`} barColor="bg-blue-500" width={`${stats.winRate}%`} />
-                    <StatRow icon={<TrendingUp size={16} />} label="Avg Profit" value={fmt(stats.avgProfit)} barColor="bg-green-400" width="60%" />
-                    <StatRow icon={<TrendingUp size={16} className="rotate-180 text-red-500" />} label="Avg Loss" value={fmt(stats.avgLoss)} barColor="bg-red-500" width="40%" />
-                    <StatRow icon={<Hash size={16} />} label="No. Trades" value={stats.numTrades.toString()} barColor="bg-purple-500" width="75%" />
+                <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar max-h-[400px]">
+                    <div className="space-y-1">
+                        <StatRow icon={<TrendingUp size={18} />} label="Equity" value={fmt(stats.equity)} progressValue={60} barColor="bg-[#DCC885]" />
+                        <StatRow icon={<TrendingUp size={18} />} label="Balance" value={fmt(stats.balance)} progressValue={100} barColor="bg-green-500" />
+                        <StatRow icon={<TrendingUp size={18} />} label="Win rate" value={`${stats.winRate}%`} progressValue={stats.winRate} barColor="bg-green-500" />
+                        <StatRow icon={<TrendingUp size={18} className="text-green-500" />} label="Avg profit" value={fmt(stats.avgProfit)} progressValue={85} barColor="bg-green-500" />
+                        <StatRow icon={<TrendingDown size={18} className="text-red-500" />} label="Avg loss" value={fmt(stats.avgLoss)} progressValue={40} barColor="bg-green-500" />
+                        <StatRow icon={<BarChart2 size={18} />} label="Number of trades" value={stats.numTrades.toString()} progressValue={90} barColor="bg-green-500" />
+                        <StatRow icon={<BarChart2 size={18} />} label="Lots" value={stats.lots.toString()} progressValue={70} barColor="bg-green-500" />
+                        <StatRow icon={<TrendingUp size={18} />} label="Sharpe Ratio" value="2.14" progressValue={80} barColor="bg-green-500" />
+                        <StatRow icon={<Award size={18} />} label="Average RRR" value="1:2.5" progressValue={100} barColor="bg-green-500" />
+                        <StatRow icon={<TrendingUp size={18} />} label="Expectancy" value="$88.40" progressValue={95} barColor="bg-green-500" />
+                        <StatRow icon={<Award size={18} />} label="Profit factor" value="3.81" progressValue={85} barColor="bg-green-500" />
+                        <StatRow icon={<Award size={18} className="text-green-500" />} label="Best Trade" value="$450.00" progressValue={90} barColor="bg-green-500" />
+                        <StatRow icon={<AlertCircle size={18} className="text-red-500" />} label="Worst Trade" value="-$120.00" progressValue={45} barColor="bg-green-500" />
+                    </div>
                 </div>
             </div>
 
@@ -154,21 +163,36 @@ interface StatRowProps {
     icon: React.ReactNode;
     label: string;
     value: string;
+    progressValue: number;
     barColor: string;
-    width: string;
 }
 
-const StatRow: React.FC<StatRowProps> = ({ icon, label, value, barColor, width }) => (
-    <div className="group">
-        <div className="flex justify-between items-center mb-2 text-sm">
-            <div className="flex items-center gap-3 text-gray-400 group-hover:text-gray-200 transition-colors">
-                <span className="p-1.5 bg-[#111] border border-gray-800 rounded text-[#DCC885]">{icon}</span>
-                {label}
-            </div>
-            <span className="font-mono text-white text-base tracking-wide transition-all duration-300">{value}</span>
+import { Info } from 'lucide-react';
+
+const StatRow: React.FC<StatRowProps> = ({ icon, label, value, progressValue, barColor }) => (
+    <div className="flex items-center gap-4 py-2">
+        {/* Square Icon Container */}
+        <div className="w-10 h-10 rounded-lg bg-[#1a1a1a] flex items-center justify-center text-gray-400 shrink-0 border border-gray-800">
+            {icon}
         </div>
-        <div className="h-1.5 w-full bg-gray-900 rounded-full overflow-hidden">
-            <div className={`h-full ${barColor} rounded-full transition-all duration-700 ease-out shadow-[0_0_10px_rgba(0,0,0,0.3)]`} style={{ width: width }}></div>
+
+        {/* Content Column */}
+        <div className="flex-1 min-w-0">
+            <div className="flex justify-between items-center mb-1">
+                <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-white">{label}</span>
+                    <Info size={12} className="text-gray-500 cursor-pointer hover:text-gray-300" />
+                </div>
+                <span className="text-sm font-medium text-white">{value}</span>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="w-full h-1.5 rounded-full bg-gray-800 overflow-hidden">
+                <div
+                    className={`h-full rounded-full ${barColor}`}
+                    style={{ width: `${Math.min(100, Math.max(0, progressValue))}%` }}
+                />
+            </div>
         </div>
     </div>
 );
