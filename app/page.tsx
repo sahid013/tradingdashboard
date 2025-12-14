@@ -6,12 +6,9 @@ import PerformanceSection from '../components/dashboard/PerformanceSection';
 import LiveDashboardSection from '../components/dashboard/LiveDashboardSection';
 import TradeHistory from '../components/dashboard/TradeHistory';
 
-import AIAnalystModal from '../components/dashboard/AIAnalystModal';
 import { Stats } from '@/types';
 
 const LiveTradingDashboard = () => {
-  // AI State
-  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
 
   // Shared Data State
   const [liveStats, setLiveStats] = useState<Stats>({
@@ -30,9 +27,8 @@ const LiveTradingDashboard = () => {
 
       <main className="container mx-auto px-4 py-8 space-y-12 max-w-7xl">
 
-
         {/* 1. Account Info & Performance Chart */}
-        <PerformanceSection onOpenAI={() => setIsAIModalOpen(true)} />
+        <PerformanceSection />
 
         {/* 2. LIVE SECTION */}
         <LiveDashboardSection stats={liveStats} setStats={setLiveStats} />
@@ -42,17 +38,6 @@ const LiveTradingDashboard = () => {
 
 
       </main>
-
-
-
-      {/* AI MODAL */}
-      {isAIModalOpen && (
-        <AIAnalystModal
-          isOpen={isAIModalOpen}
-          onClose={() => setIsAIModalOpen(false)}
-          stats={liveStats}
-        />
-      )}
     </div>
   );
 };

@@ -14,17 +14,17 @@ import {
     Legend,
     Filler,
 } from 'chart.js';
-import { User, Sparkles } from 'lucide-react';
+import { User } from 'lucide-react';
 import KPICard from './KPICard';
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, Filler);
 
 interface PerformanceSectionProps {
-    onOpenAI: () => void;
+    // onOpenAI removed
 }
 
-const PerformanceSection: React.FC<PerformanceSectionProps> = ({ onOpenAI }) => {
+const PerformanceSection: React.FC<PerformanceSectionProps> = () => {
     const chartData = {
         labels: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'],
         datasets: [
@@ -88,13 +88,7 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = ({ onOpenAI }) => 
                 </div>
 
                 {/* AI BUTTON */}
-                <button
-                    onClick={onOpenAI}
-                    className="flex items-center gap-2 bg-[#1a1a1a] hover:bg-[#222] border border-[#DCC885]/30 text-[#DCC885] px-4 py-2 rounded-lg transition-all group shadow-[0_0_15px_rgba(220,200,133,0.05)] hover:shadow-[0_0_20px_rgba(220,200,133,0.15)]"
-                >
-                    <Sparkles size={16} className="group-hover:animate-pulse" />
-                    <span className="text-sm font-bold">Get AI Analysis</span>
-                </button>
+
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">

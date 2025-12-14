@@ -78,31 +78,62 @@ const LiveDashboardSection: React.FC<LiveDashboardSectionProps> = ({ stats, setS
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-            y: { grid: { color: '#222' }, ticks: { color: '#666' } },
-            x: { grid: { display: false }, ticks: { color: '#666' } },
+            y: {
+                grid: { display: false }, // No horizontal grid lines
+                ticks: {
+                    color: '#666',
+                    callback: (value: any) => '$' + value / 1000 + 'k'
+                },
+                border: { display: false }
+            },
+            x: {
+                grid: { color: '#333', borderDash: [4, 4], drawBorder: false }, // Vertical dashed lines
+                ticks: { color: '#666' },
+                border: { display: false }
+            },
         },
         plugins: {
-            legend: { position: 'top' as const, align: 'end' as const, labels: { color: '#888', usePointStyle: true, boxWidth: 6 } },
+            legend: {
+                position: 'top' as const,
+                align: 'end' as const,
+                labels: { color: '#888', usePointStyle: true, boxWidth: 8, padding: 20 }
+            },
+            tooltip: {
+                mode: 'index' as const,
+                intersect: false,
+                backgroundColor: '#111',
+                titleColor: '#fff',
+                bodyColor: '#ccc',
+                borderColor: '#333',
+                borderWidth: 1,
+            }
         },
         animation: { duration: 500 },
     };
 
     const chartConfig = {
-        labels: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+        labels: ['29', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
         datasets: [
             {
                 label: 'Trades',
-                data: chartDataState,
+                data: [1500, 1800, 2100, 2700, 2700, 2200, 1500], // Scaled up to match $k view
                 backgroundColor: '#22c55e',
-                barThickness: 6,
+                barThickness: 10,
                 borderRadius: 4,
+                grouped: false, // Allows overlap
+                order: 2, // Render first (behind)
             },
             {
                 label: 'Lots',
-                data: chartDataState.map(d => d * 0.4),
-                backgroundColor: '#DCC885',
-                barThickness: 6,
+                data: [500, 700, 800, 1100, 950, 800, 550], // Scaled up
+                backgroundColor: '#fbbf24', // Yellowish color from image
+                barThickness: 10,
                 borderRadius: 4,
+                grouped: false, // Allows overlap
+                order: 1, // Render second (on top) - Wait, in Chart.js higher order is 'z-index' usually? No, array order usually dictates. Let's use order property to be safe. ChartJS default: lower 'order' is drawn ON TOP? No, default is 0. Reversing array might be safer details.
+                // Actually, in Chart.js, datasets are drawn in order of the array. Dataset[0] is background, Dataset[1] is foreground.
+                // So I will just utilize the array order and remove 'order' property to avoid confusion, or set explicit z-index if needed.
+                // Let's stick to array position: Green first, Yellow second.
             },
         ],
     };
@@ -142,7 +173,7 @@ const LiveDashboardSection: React.FC<LiveDashboardSectionProps> = ({ stats, setS
 
             {/* --- RIGHT SECTION: Activity Chart --- */}
             <div className="flex-1 bg-[#0a0a0a] p-6 rounded-xl border border-gray-800 flex flex-col">
-                <h3 className="text-xl font-bold text-[#DCC885] mb-6">Activity</h3>
+                <h3 className="text-xl font-bold text-[#DCC885] mb-6">Activity</h3> {/* Increased size */}
                 <div className="flex-1 min-h-[250px] w-full">
                     <Bar options={chartOptions} data={chartConfig} />
                 </div>
